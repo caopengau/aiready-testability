@@ -128,6 +128,11 @@ export interface GraphMetadata {
   majorIssues: number;
   minorIssues: number;
   infoIssues: number;
+  
+  // Business metrics (v0.10+)
+  estimatedMonthlyCost?: number;
+  estimatedDeveloperHours?: number;
+  aiAcceptanceRate?: number;
 }
 
 /**

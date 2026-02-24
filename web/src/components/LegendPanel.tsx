@@ -1,4 +1,4 @@
-import { ThemeColors, SeverityLevel, EdgeType } from '../types';
+import { ThemeColors, SeverityLevel, EdgeType, BusinessMetrics } from '../types';
 import { severityColors, edgeColors } from '../constants';
 
 // Checkbox/Toggle Icon
@@ -143,6 +143,7 @@ interface LegendPanelProps {
   visibleEdgeTypes: Set<EdgeType>;
   onToggleSeverity: (severity: SeverityLevel) => void;
   onToggleEdgeType: (edgeType: EdgeType) => void;
+  metadata?: BusinessMetrics;
 }
 
 export function LegendPanel({ 
@@ -150,7 +151,8 @@ export function LegendPanel({
   visibleSeverities, 
   visibleEdgeTypes,
   onToggleSeverity,
-  onToggleEdgeType 
+  onToggleEdgeType,
+  metadata,
 }: LegendPanelProps) {
   // Get visible counts - exclude 'default' (No Issues) from count
   const visibleSeverityCount = visibleSeverities.size;
@@ -263,6 +265,56 @@ export function LegendPanel({
             </div>
           </div>
         </div>
+
+        {/* Business Impact Section */}
+        {metadata && (metadata.estimatedMonthlyCost || metadata.estimatedDeveloperHours || metadata.aiAcceptanceRate) && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <h3 
+              className="text-xs font-bold uppercase tracking-widest" 
+              style={{ color: colors.textMuted, marginBottom: '4px' }}
+            >
+              Business Impact
+            </h3>
+            <div 
+              className="p-3 rounded-xl" 
+              style={{ backgroundColor: `${colors.cardBg}80`, display: 'flex', flexDirection: 'column', gap: '6px' }}
+            >
+              {metadata.estimatedMonthlyCost !== undefined && (
+                <div className="flex justify-between items-center py-1 px-2 rounded-lg hover:bg-white/5 transition-colors">
+                  <span className="text-xs font-medium" style={{ color: colors.textMuted }}>💰 Monthly Cost</span>
+                  <span className="text-xs font-bold" style={{ color: '#f59e0b' }}>
+                    {metadata.estimatedMonthlyCost >= 1000
+                      ? `$${(metadata.estimatedMonthlyCost / 1000).toFixed(1)}k`
+                      : `$${metadata.estimatedMonthlyCost.toFixed(0)}`}
+                  </span>
+                </div>
+              )}
+              {metadata.estimatedDeveloperHours !== undefined && (
+                <div className="flex justify-between items-center py-1 px-2 rounded-lg hover:bg-white/5 transition-colors">
+                  <span className="text-xs font-medium" style={{ color: colors.textMuted }}>⏱️ Fix Time</span>
+                  <span className="text-xs font-bold" style={{ color: '#22d3ee' }}>
+                    {metadata.estimatedDeveloperHours >= 40
+                      ? `${(metadata.estimatedDeveloperHours / 40).toFixed(1)}w`
+                      : `${metadata.estimatedDeveloperHours.toFixed(1)}h`}
+                  </span>
+                </div>
+              )}
+              {metadata.aiAcceptanceRate !== undefined && (
+                <div className="flex justify-between items-center py-1 px-2 rounded-lg hover:bg-white/5 transition-colors">
+                  <span className="text-xs font-medium" style={{ color: colors.textMuted }}>🤖 AI Acceptance</span>
+                  <span 
+                    className="text-xs font-bold"
+                    style={{ 
+                      color: metadata.aiAcceptanceRate >= 0.7 ? '#4ade80' : metadata.aiAcceptanceRate >= 0.5 ? '#fb923c' : '#f87171' 
+                    }}
+                  >
+                    {Math.round(metadata.aiAcceptanceRate * 100)}%
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Quick Tips */}
         <div 

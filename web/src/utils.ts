@@ -1,4 +1,4 @@
-import { FileNode, GraphEdge, GraphData, ReportData } from './types';
+import { FileNode, GraphEdge, GraphData, ReportData, BusinessMetrics } from './types';
 import { severityColors, GRAPH_CONFIG } from './constants';
 
 export function getSeverityColor(severity: string | undefined): string {
@@ -9,6 +9,40 @@ export function getSeverityColor(severity: string | undefined): string {
   if (s === 'minor') return severityColors.minor;
   if (s === 'info') return severityColors.info;
   return severityColors.default;
+}
+
+/**
+ * Extract business metrics from the scoring breakdown (v0.10+).
+ * Mirrors the logic in the VS Code extension's extractBusinessMetrics.
+ */
+function extractBusinessMetrics(report: ReportData): BusinessMetrics {
+  const breakdown = report.scoring?.breakdown;
+  if (!breakdown || breakdown.length === 0) return {};
+
+  let totalCost = 0;
+  let totalHours = 0;
+
+  for (const tool of breakdown) {
+    const m = tool.rawMetrics;
+    if (m?.estimatedMonthlyCost) totalCost += m.estimatedMonthlyCost;
+    if (m?.estimatedDeveloperHours) totalHours += m.estimatedDeveloperHours;
+  }
+
+  // Derive AI acceptance rate from average tool scores
+  let aiAcceptanceRate: number | undefined;
+  if (breakdown.length >= 2) {
+    let rate = 0.65;
+    for (const tool of breakdown) {
+      rate += (tool.score - 50) * 0.003;
+    }
+    aiAcceptanceRate = Math.max(0.1, Math.min(0.95, rate));
+  }
+
+  return {
+    estimatedMonthlyCost: totalCost > 0 ? totalCost : undefined,
+    estimatedDeveloperHours: totalHours > 0 ? totalHours : undefined,
+    aiAcceptanceRate,
+  };
 }
 
 export function transformReportToGraph(report: ReportData, runtimeGraphConfig?: { maxNodes?: number; maxEdges?: number }): GraphData {
@@ -204,6 +238,7 @@ export function transformReportToGraph(report: ReportData, runtimeGraphConfig?: 
       nodeLimit: graphConfig.maxNodes,
       edgeLimit: graphConfig.maxEdges,
     },
+    metadata: extractBusinessMetrics(report),
   };
 }
 

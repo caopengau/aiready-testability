@@ -1,5 +1,14 @@
 // Types for the visualization
 
+/**
+ * Business impact metrics (v0.10+)
+ */
+export interface BusinessMetrics {
+  estimatedMonthlyCost?: number;
+  estimatedDeveloperHours?: number;
+  aiAcceptanceRate?: number;
+}
+
 export interface FileNode {
   id: string;
   label: string;
@@ -28,6 +37,7 @@ export interface GraphData {
     nodeLimit: number;
     edgeLimit: number;
   };
+  metadata?: BusinessMetrics;
 }
 
 // Filter types
@@ -68,6 +78,13 @@ export interface ReportData {
   duplicates: Duplicate[];
   context: ContextFile[];
   summary: { totalIssues: number };
+  scoring?: {
+    breakdown?: Array<{
+      toolName: string;
+      score: number;
+      rawMetrics?: Record<string, number>;
+    }>;
+  };
 }
 
 export type Theme = 'dark' | 'light' | 'system';

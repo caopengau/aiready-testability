@@ -159,6 +159,7 @@ function App() {
         theme={theme}
         setTheme={setTheme}
         data={filteredData}
+        metadata={data?.metadata}
       />
 
       {/* Truncation warning banner */}
@@ -221,6 +222,7 @@ function App() {
                 visibleEdgeTypes={visibleEdgeTypes}
                 onToggleSeverity={handleToggleSeverity}
                 onToggleEdgeType={handleToggleEdgeType}
+                metadata={data?.metadata}
               />
             </div>
           )}

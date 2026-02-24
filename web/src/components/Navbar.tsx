@@ -1,4 +1,4 @@
-import { ThemeColors, GraphData, Theme } from '../types';
+import { ThemeColors, GraphData, Theme, BusinessMetrics } from '../types';
 
 // Icons as inline SVG components for the theme toggle
 const SunIcon = ({ className }: { className?: string }) => (
@@ -64,9 +64,10 @@ interface NavbarProps {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   data: GraphData | null;
+  metadata?: BusinessMetrics;
 }
 
-export function Navbar({ colors, theme, setTheme, data }: NavbarProps) {
+export function Navbar({ colors, theme, setTheme, data, metadata }: NavbarProps) {
   return (
     <nav 
       className="h-16 backdrop-blur-md border-b flex items-center justify-between px-6 z-50 relative"
@@ -161,6 +162,26 @@ export function Navbar({ colors, theme, setTheme, data }: NavbarProps) {
               <span style={{ color: colors.textMuted }}>Links</span>
               <span style={{ color: colors.text }}>{data.edges.length}</span>
             </div>
+            {metadata?.estimatedMonthlyCost !== undefined && (
+              <div 
+                className="rounded-lg border text-xs font-medium flex items-center"
+                style={{ 
+                  backgroundColor: `${colors.cardBg}cc`, 
+                  borderColor: colors.cardBorder,
+                  padding: '8px 14px',
+                  gap: '8px',
+                }}
+                title="Estimated monthly AI token cost from wasted context"
+              >
+                <span style={{ fontSize: '10px' }}>💰</span>
+                <span style={{ color: colors.textMuted }}>Cost</span>
+                <span style={{ color: '#f59e0b', fontWeight: 600 }}>
+                  {metadata.estimatedMonthlyCost >= 1000
+                    ? `$${(metadata.estimatedMonthlyCost / 1000).toFixed(1)}k`
+                    : `$${metadata.estimatedMonthlyCost.toFixed(0)}`}/mo
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>

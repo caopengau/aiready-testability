@@ -13,6 +13,8 @@ export interface TestabilityOptions {
   include?: string[];
   /** File glob patterns to exclude */
   exclude?: string[];
+  /** Progress callback */
+  onProgress?: (processed: number, total: number, message: string) => void;
 }
 
 export interface TestabilityIssue extends Issue {

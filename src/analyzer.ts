@@ -10,81 +10,16 @@
  * 5. Observability (return values vs. external state mutations)
  */
 
-import { readdirSync, statSync, readFileSync, existsSync } from 'fs';
-import { join, extname } from 'path';
+import { scanFiles, calculateTestabilityIndex } from '@aiready/core';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
 import { parse } from '@typescript-eslint/typescript-estree';
 import type { TSESTree } from '@typescript-eslint/types';
-import { calculateTestabilityIndex } from '@aiready/core';
 import type {
   TestabilityOptions,
   TestabilityIssue,
   TestabilityReport,
 } from './types';
-
-// ---------------------------------------------------------------------------
-// File classification
-// ---------------------------------------------------------------------------
-
-const SRC_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx']);
-const DEFAULT_EXCLUDES = [
-  'node_modules',
-  'dist',
-  '.git',
-  'coverage',
-  '.turbo',
-  'build',
-];
-const TEST_PATTERNS = [
-  /\.(test|spec)\.(ts|tsx|js|jsx)$/,
-  /__tests__\//,
-  /\/tests?\//,
-  /\/e2e\//,
-  /\/fixtures\//,
-];
-
-function isTestFile(filePath: string, extra?: string[]): boolean {
-  if (TEST_PATTERNS.some((p) => p.test(filePath))) return true;
-  if (extra) return extra.some((p) => filePath.includes(p));
-  return false;
-}
-
-function isSourceFile(filePath: string): boolean {
-  return SRC_EXTENSIONS.has(extname(filePath));
-}
-
-function collectFiles(
-  dir: string,
-  options: TestabilityOptions,
-  depth = 0
-): string[] {
-  if (depth > (options.maxDepth ?? 20)) return [];
-  const excludes = [...DEFAULT_EXCLUDES, ...(options.exclude ?? [])];
-  const files: string[] = [];
-  let entries: string[];
-  try {
-    entries = readdirSync(dir);
-  } catch {
-    return files;
-  }
-  for (const entry of entries) {
-    if (excludes.some((ex) => entry === ex || entry.includes(ex))) continue;
-    const full = join(dir, entry);
-    let stat;
-    try {
-      stat = statSync(full);
-    } catch {
-      continue;
-    }
-    if (stat.isDirectory()) {
-      files.push(...collectFiles(full, options, depth + 1));
-    } else if (stat.isFile() && isSourceFile(full)) {
-      if (!options.include || options.include.some((p) => full.includes(p))) {
-        files.push(full);
-      }
-    }
-  }
-  return files;
-}
 
 // ---------------------------------------------------------------------------
 // Per-file analysis
@@ -324,10 +259,29 @@ function detectTestFramework(rootDir: string): boolean {
 // Main analyzer
 // ---------------------------------------------------------------------------
 
+const TEST_PATTERNS = [
+  /\.(test|spec)\.(ts|tsx|js|jsx)$/,
+  /__tests__\//,
+  /\/tests?\//,
+  /\/e2e\//,
+  /\/fixtures\//,
+];
+
+function isTestFile(filePath: string, extra?: string[]): boolean {
+  if (TEST_PATTERNS.some((p) => p.test(filePath))) return true;
+  if (extra) return extra.some((p) => filePath.includes(p));
+  return false;
+}
+
 export async function analyzeTestability(
   options: TestabilityOptions
 ): Promise<TestabilityReport> {
-  const allFiles = collectFiles(options.rootDir, options);
+  // Use core scanFiles which respects .gitignore recursively
+  const allFiles = await scanFiles({
+    ...options,
+    include: options.include || ['**/*.{ts,tsx,js,jsx}'],
+    includeTests: true,
+  });
 
   const sourceFiles = allFiles.filter(
     (f) => !isTestFile(f, options.testPatterns)
@@ -344,7 +298,15 @@ export async function analyzeTestability(
     externalStateMutations: 0,
   };
 
+  let processed = 0;
   for (const f of sourceFiles) {
+    processed++;
+    options.onProgress?.(
+      processed,
+      sourceFiles.length,
+      `testability: analyzing files`
+    );
+
     const a = analyzeFileTestability(f);
     for (const key of Object.keys(aggregated) as Array<keyof FileAnalysis>) {
       aggregated[key] += a[key];

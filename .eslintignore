@@ -1,0 +1,6 @@
+# Ignore node scripts and generated artifacts
+scripts/*.js
+test/*.js
+web/*.cjs
+web/dist/
+dist/

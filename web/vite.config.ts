@@ -45,7 +45,7 @@ export default defineConfig(async ({ command }) => {
               res.end('Report not found');
               return;
             }
-            let data = await fsp.readFile(reportPath, 'utf8');
+            const data = await fsp.readFile(reportPath, 'utf8');
             const report = JSON.parse(data);
 
             // Inject visualizer config from env if available

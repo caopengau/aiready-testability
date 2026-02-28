@@ -8,8 +8,6 @@ import type {
   GraphData,
   FileNode,
   DependencyEdge,
-  Cluster,
-  IssueOverlay,
   IssueSeverity,
 } from '../types';
 
@@ -32,7 +30,7 @@ export class GraphBuilder {
   private normalizeLabel(filePath: string) {
     try {
       return path.relative(this.rootDir, filePath);
-    } catch (e) {
+    } catch {
       return filePath;
     }
   }
@@ -279,7 +277,7 @@ export class GraphBuilder {
         // than only bumping node prominence.
         try {
           builder.addEdge(file, resolvedRel, 'related');
-        } catch (e) {
+        } catch {
           // ignore any edge errors
         }
       });

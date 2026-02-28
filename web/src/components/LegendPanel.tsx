@@ -6,21 +6,6 @@ import {
 } from '../types';
 import { severityColors, edgeColors } from '../constants';
 
-// Checkbox/Toggle Icon
-const CheckIcon = ({ checked }: { checked: boolean }) => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke={checked ? '#10b981' : '#6b7280'}
-    strokeWidth="3"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {checked && <path d="M20 6L9 17l-5-5" />}
-  </svg>
-);
 
 // Legend Item with Toggle
 function LegendItemWithToggle({
@@ -105,53 +90,9 @@ function LegendItemWithToggle({
 }
 
 // Regular Legend Item (non-toggleable)
-function LegendItem({
-  color,
-  label,
-  isGlow = false,
-  isLine = false,
-  colors,
-}: {
-  color: string;
-  label: string;
-  isGlow?: boolean;
-  isLine?: boolean;
-  colors: ThemeColors;
-}) {
-  return (
-    <div
-      className="group cursor-default transition-all hover:bg-white/5"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '6px 0',
-        borderRadius: '8px',
-      }}
-    >
-      {isLine ? (
-        <span
-          className="w-10 h-1 rounded-full transition-transform group-hover:scale-y-150 flex-shrink-0"
-          style={{ backgroundColor: color }}
-        />
-      ) : (
-        <span
-          className={`w-4 h-4 rounded-full transition-transform group-hover:scale-125 flex-shrink-0 ${isGlow ? 'shadow-lg' : ''}`}
-          style={{
-            backgroundColor: color,
-            boxShadow: isGlow ? `0 0 10px ${color}90` : 'none',
-          }}
-        />
-      )}
-      <span
-        className="text-sm font-medium transition-colors leading-tight"
-        style={{ color: colors.textMuted }}
-      >
-        {label}
-      </span>
-    </div>
-  );
-}
+// function LegendItem({ ... }) - removed as it was unused
+
+// Toggleable Legend Item
 
 interface LegendPanelProps {
   colors: ThemeColors;

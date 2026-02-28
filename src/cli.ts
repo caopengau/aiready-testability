@@ -10,7 +10,7 @@
  *   aiready-visualize sample -o file.html # Generate sample visualization
  */
 
-import { readFileSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { exec, spawn } from 'child_process';
 import { fileURLToPath } from 'url';

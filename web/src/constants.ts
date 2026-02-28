@@ -17,30 +17,6 @@ export const edgeColors: Record<string, string> = {
 };
 
 // Ensure GRAPH_CONFIG.edgeDistances has all edge types
-const EDGE_DISTANCES = {
-  similarity: 80,
-  related: 150,
-  dependency: 100,
-  reference: 120,
-  default: 100,
-};
-
-const EDGE_STRENGTHS = {
-  similarity: 0.5,
-  related: 0.1,
-  dependency: 0.3,
-  reference: 0.2,
-  default: 0.3,
-};
-
-const EDGE_OPACITIES = {
-  similarity: 0.8,
-  related: 0.2,
-  dependency: 0.5,
-  reference: 0.4,
-  default: 0.5,
-};
-
 export const themeConfig: Record<'dark' | 'light', ThemeColors> = {
   dark: {
     bg: '#000000',

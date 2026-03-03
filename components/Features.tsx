@@ -17,7 +17,7 @@ export function Features() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
-              Three Powerful Tools,{' '}
+              A Complete Suite of Tools,{' '}
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 One Command
               </span>

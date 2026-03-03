@@ -10,49 +10,98 @@ import {
   Radar,
   ResponsiveContainer,
 } from 'recharts';
-import { useEffect } from 'react';
+import {
+  Brain,
+  DollarSign,
+  Compass,
+  Search,
+  Maximize2,
+  FileCheck2,
+} from 'lucide-react';
 
 const tools = [
   {
-    id: 'pattern',
-    icon: '🛡️',
-    title: 'Pattern Detection',
+    id: 'cognitive',
+    icon: <Brain className="w-8 h-8" />,
+    title: 'Cognitive Load',
     description:
-      'Find semantic duplicates that look different but do the same thing.',
-    package: '@aiready/pattern-detect',
+      'Analyze the mental effort required for AI to understand your code beyond simple tokens.',
+    package: '@aiready/core (future-proof)',
     color: 'from-blue-600 to-cyan-500',
     stats: [
-      { metric: 'Accuracy', value: 94 },
-      { metric: 'Speed', value: 72 },
-      { metric: 'Coverage', value: 88 },
+      { metric: 'Model-Aware', value: 98 },
+      { metric: 'Clarity', value: 85 },
+      { metric: 'Depth', value: 92 },
+    ],
+  },
+  {
+    id: 'roi',
+    icon: <DollarSign className="w-8 h-8" />,
+    title: 'Business ROI & Debt',
+    description:
+      'Quantify the cost of confusing code in dollars and developers hours lost each month.',
+    package: '@aiready/core (roi-engine)',
+    color: 'from-green-600 to-teal-500',
+    stats: [
+      { metric: 'Precision', value: 92 },
+      { metric: 'Temporal', value: 88 },
+      { metric: 'Velocity', value: 95 },
+    ],
+  },
+  {
+    id: 'grounding',
+    icon: <Compass className="w-8 h-8" />,
+    title: 'Agent Grounding',
+    description:
+      'Measure how well autonomous agents can navigate and understand project structure unaided.',
+    package: '@aiready/core (grounding)',
+    color: 'from-purple-600 to-pink-500',
+    stats: [
+      { metric: 'Navigation', value: 96 },
+      { metric: 'API Clarity', value: 91 },
+      { metric: 'Structure', value: 94 },
+    ],
+  },
+  {
+    id: 'pattern',
+    icon: <Search className="w-8 h-8" />,
+    title: 'Pattern Detection',
+    description:
+      'Detect semantic duplicates and logic fragmentation that lead to AI hallucinations.',
+    package: '@aiready/pattern-detect',
+    color: 'from-orange-500 to-red-500',
+    stats: [
+      { metric: 'Recall', value: 94 },
+      { metric: 'Symmetry', value: 89 },
+      { metric: 'Coverage', value: 91 },
     ],
   },
   {
     id: 'context',
-    icon: '📈',
+    icon: <Maximize2 className="w-8 h-8" />,
     title: 'Context Analysis',
     description:
-      'Analyze import depth, cohesion, and fragmentation for AI optimization.',
+      'Optimize token usage by mapping cross-file dependencies and context fragmentation.',
     package: '@aiready/context-analyzer',
-    color: 'from-cyan-600 to-teal-500',
+    color: 'from-blue-500 to-indigo-500',
     stats: [
-      { metric: 'Accuracy', value: 98 },
-      { metric: 'Speed', value: 96 },
-      { metric: 'Coverage', value: 85 },
+      { metric: 'Efficiency', value: 97 },
+      { metric: 'Topology', value: 86 },
+      { metric: 'Pruning', value: 93 },
     ],
   },
   {
     id: 'consistency',
-    icon: '⚡',
-    title: 'Consistency Checker',
+    icon: <FileCheck2 className="w-8 h-8" />,
+    title: 'Consistency Check',
     description:
-      'Catch naming issues and architectural drift before they become problems.',
+      'Enforce naming conventions and structural patterns that clarify intent for AI models.',
     package: '@aiready/consistency',
-    color: 'from-purple-600 to-pink-500',
+    color: 'from-cyan-500 to-blue-600',
     stats: [
-      { metric: 'Accuracy', value: 91 },
-      { metric: 'Speed', value: 99 },
-      { metric: 'Coverage', value: 93 },
+      { metric: 'Alignment', value: 95 },
+      { metric: 'Uniformity', value: 92 },
+      { metric: 'Strictness', value: 88 },
     ],
   },
 ];
@@ -68,14 +117,14 @@ export default function ToolShowcase() {
       initial={{ opacity: 0 }}
       animate={isInView ? { opacity: 1 } : {}}
       transition={{ duration: 0.8 }}
-      className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+      className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
     >
       {tools.map((tool, idx) => (
         <motion.div
           key={tool.id}
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: idx * 0.15, duration: 0.6 }}
+          transition={{ delay: idx * 0.1, duration: 0.6 }}
           onHoverStart={() => setHoveredTool(tool.id)}
           onHoverEnd={() => setHoveredTool(null)}
           className="relative group"
@@ -93,7 +142,7 @@ export default function ToolShowcase() {
                 hoveredTool === tool.id ? { rotate: [0, -10, 10, -10, 0] } : {}
               }
               transition={{ duration: 0.5 }}
-              className={`w-16 h-16 bg-gradient-to-r ${tool.color} rounded-2xl flex items-center justify-center mb-4 text-3xl shadow-lg`}
+              className={`w-16 h-16 bg-gradient-to-r ${tool.color} rounded-2xl flex items-center justify-center mb-4 text-white shadow-lg`}
             >
               {tool.icon}
             </motion.div>
@@ -111,7 +160,7 @@ export default function ToolShowcase() {
                     <PolarGrid stroke="#e2e8f0" />
                     <PolarAngleAxis
                       dataKey="metric"
-                      tick={{ fill: '#64748b', fontSize: 12 }}
+                      tick={{ fill: '#64748b', fontSize: 10 }}
                     />
                     <Radar
                       name={tool.title}
@@ -143,7 +192,7 @@ export default function ToolShowcase() {
               )}
             </div>
 
-            <code className="text-sm text-slate-500 font-mono bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+            <code className="text-[10px] text-slate-500 font-mono bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-200">
               {tool.package}
             </code>
           </div>

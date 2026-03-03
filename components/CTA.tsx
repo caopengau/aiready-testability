@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import ParallaxSection from './ParallaxSection';
 import AgentPrompt from './AgentPrompt';
+import { Terminal, Bot, Code2, CheckCircle2 } from 'lucide-react';
 
 export function CTA() {
   const [showAgent, setShowAgent] = useState(false);
@@ -57,24 +58,34 @@ export function CTA() {
               >
                 <button
                   onClick={() => setShowAgent(false)}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-2 ${
                     !showAgent
                       ? 'bg-slate-700 text-white'
                       : 'bg-slate-800 text-slate-400 hover:text-slate-300'
                   }`}
                 >
-                  💻 CLI Command
+                  <Terminal className="w-4 h-4" />
+                  CLI Command
                 </button>
                 <button
                   onClick={() => setShowAgent(true)}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-2 ${
                     showAgent
                       ? 'bg-slate-700 text-white'
                       : 'bg-slate-800 text-slate-400 hover:text-slate-300'
                   }`}
                 >
-                  🤖 AI Agent Prompt
+                  <Bot className="w-4 h-4" />
+                  AI Agent Prompt
                 </button>
+                <a
+                  href="https://marketplace.visualstudio.com/items?itemName=pengcao.aiready"
+                  target="_blank"
+                  className="px-4 py-2 rounded-lg font-semibold text-sm transition-all bg-blue-600/20 text-blue-300 border border-blue-500/30 hover:bg-blue-600/30 flex items-center gap-2"
+                >
+                  <Code2 className="w-4 h-4" />
+                  VS Code Extension
+                </a>
               </motion.div>
 
               {/* CLI Command */}
@@ -117,12 +128,20 @@ export function CTA() {
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
                 viewport={{ once: true }}
-                className="text-sm text-slate-400"
+                className="text-sm text-slate-400 flex justify-center items-center gap-6"
               >
-                <span className="text-green-400 font-bold">✓</span> Free forever
-                ·<span className="text-green-400 font-bold"> ✓</span> Open
-                source ·<span className="text-green-400 font-bold"> ✓</span> No
-                credit card required
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-green-400" /> Free
+                  forever
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-green-400" /> Open
+                  source
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-green-400" /> No credit
+                  card required
+                </span>
               </motion.p>
             </div>
           </div>

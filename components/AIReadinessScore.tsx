@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import ParallaxSection from './ParallaxSection';
+import { Target, CheckCircle2 } from 'lucide-react';
 
 export function AIReadinessScore() {
   return (
@@ -52,41 +53,41 @@ export function AIReadinessScore() {
 
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-700">Pattern Detection</span>
-                    <span className="font-bold text-slate-900">66/100</span>
+                    <span className="text-slate-700">Future-Proofing</span>
+                    <span className="font-bold text-slate-900">72/100</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
                     <div
                       className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full"
-                      style={{ width: '66%' }}
+                      style={{ width: '72%' }}
                     ></div>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-700">Context Analysis</span>
-                    <span className="font-bold text-slate-900">52/100</span>
+                    <span className="text-slate-700">AI Signal Clarity</span>
+                    <span className="font-bold text-slate-900">58/100</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
                     <div
                       className="bg-gradient-to-r from-cyan-500 to-cyan-600 h-2 rounded-full"
-                      style={{ width: '52%' }}
+                      style={{ width: '58%' }}
                     ></div>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-700">Consistency</span>
-                    <span className="font-bold text-slate-900">80/100</span>
+                    <span className="text-slate-700">Agent Grounding</span>
+                    <span className="font-bold text-slate-900">84/100</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
                     <div
                       className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full"
-                      style={{ width: '80%' }}
+                      style={{ width: '84%' }}
                     ></div>
                   </div>
                 </div>
 
                 <div className="text-sm text-slate-600 bg-slate-50 p-4 rounded-lg">
-                  <strong>Formula:</strong> (66×40 + 52×35 + 80×25) / 100 = 65
+                  <strong>Formula:</strong> (72×40 + 58×35 + 84×25) / 100 = 70
                 </div>
               </motion.div>
 
@@ -152,24 +153,25 @@ export function AIReadinessScore() {
                 </div>
 
                 <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl border-2 border-blue-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-4">
-                    🎯 Customizable & Forward-Compatible
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <Target className="w-6 h-6 text-blue-600" />
+                    Customizable & Forward-Compatible
                   </h3>
                   <ul className="space-y-3 text-slate-700">
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">✓</span>
+                      <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
                       <span>Adjust weights for your priorities</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">✓</span>
+                      <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
                       <span>Set thresholds for CI/CD gates</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">✓</span>
+                      <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
                       <span>Auto-rebalances as new tools launch</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">✓</span>
+                      <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
                       <span>Track improvements over time</span>
                     </li>
                   </ul>

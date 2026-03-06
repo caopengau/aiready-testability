@@ -1,13 +1,16 @@
-/**
- * Core types for graph visualization
- */
-
-import type { TokenBudget } from '@aiready/core';
+import type {
+  TokenBudget,
+  Severity,
+  GraphData as CoreGraphData,
+  GraphNode,
+  GraphEdge,
+  GraphMetadata as CoreGraphMetadata,
+} from '@aiready/core';
 
 /**
  * Severity levels for issues
  */
-export type IssueSeverity = 'critical' | 'major' | 'minor' | 'info';
+export type IssueSeverity = Severity;
 
 /**
  * Base graph node (compatible with d3-force SimulationNodeDatum)
@@ -34,7 +37,7 @@ export interface BaseGraphLink {
 /**
  * File node in the dependency graph
  */
-export interface FileNode extends BaseGraphNode {
+export interface FileNode extends BaseGraphNode, GraphNode {
   id: string;
   path: string;
   label: string;
@@ -61,12 +64,12 @@ export interface FileNode extends BaseGraphNode {
 /**
  * Dependency edge between files
  */
-export interface DependencyEdge extends BaseGraphLink {
+export interface DependencyEdge extends BaseGraphLink, GraphEdge {
   source: string | FileNode;
   target: string | FileNode;
 
   // Edge properties
-  type?: 'import' | 'require' | 'dynamic';
+  type?: 'import' | 'require' | 'dynamic' | any;
   weight?: number;
 
   // Visual properties (from GraphLink)
@@ -91,13 +94,8 @@ export interface Cluster {
  */
 export interface IssueOverlay {
   id: string;
-  type:
-    | 'duplicate'
-    | 'circular-dependency'
-    | 'inconsistency'
-    | 'high-cost'
-    | 'complexity';
-  severity: IssueSeverity;
+  type: string;
+  severity: Severity;
   nodeIds: string[];
   edgeIds?: string[];
   message: string;
@@ -107,7 +105,7 @@ export interface IssueOverlay {
 /**
  * Complete graph data structure
  */
-export interface GraphData {
+export interface GraphData extends CoreGraphData {
   nodes: FileNode[];
   edges: DependencyEdge[];
   clusters: Cluster[];
@@ -118,7 +116,7 @@ export interface GraphData {
 /**
  * Metadata about the graph
  */
-export interface GraphMetadata {
+export interface GraphMetadata extends CoreGraphMetadata {
   projectName?: string;
   timestamp: string;
   totalFiles: number;
@@ -149,7 +147,7 @@ export interface GraphMetadata {
  */
 export interface FilterOptions {
   severities?: IssueSeverity[];
-  issueTypes?: IssueOverlay['type'][];
+  issueTypes?: string[];
   domains?: string[];
   moduleTypes?: FileNode['moduleType'][];
   minTokenCost?: number;

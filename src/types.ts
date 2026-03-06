@@ -1,4 +1,4 @@
-import type { Issue } from '@aiready/core';
+import type { Issue, IssueType } from '@aiready/core';
 
 export interface TestabilityOptions {
   /** Root directory to scan */
@@ -18,7 +18,7 @@ export interface TestabilityOptions {
 }
 
 export interface TestabilityIssue extends Issue {
-  type: 'low-testability';
+  type: IssueType.LowTestability;
   /** Category of testability barrier */
   dimension:
     | 'test-coverage'

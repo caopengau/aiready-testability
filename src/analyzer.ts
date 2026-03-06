@@ -10,7 +10,12 @@
  * 5. Observability (return values vs. external state mutations)
  */
 
-import { scanFiles, calculateTestabilityIndex } from '@aiready/core';
+import {
+  scanFiles,
+  calculateTestabilityIndex,
+  Severity,
+  IssueType,
+} from '@aiready/core';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { parse } from '@typescript-eslint/typescript-estree';
@@ -336,9 +341,9 @@ export async function analyzeTestability(
 
   if (!hasTestFramework) {
     issues.push({
-      type: 'low-testability',
+      type: IssueType.LowTestability,
       dimension: 'framework',
-      severity: 'critical',
+      severity: Severity.Critical,
       message:
         'No testing framework detected in package.json — AI changes cannot be verified at all.',
       location: { file: options.rootDir, line: 0 },
@@ -351,9 +356,9 @@ export async function analyzeTestability(
     const needed =
       Math.ceil(sourceFiles.length * minCoverage) - testFiles.length;
     issues.push({
-      type: 'low-testability',
+      type: IssueType.LowTestability,
       dimension: 'test-coverage',
-      severity: actualRatio === 0 ? 'critical' : 'major',
+      severity: actualRatio === 0 ? Severity.Critical : Severity.Major,
       message: `Test ratio is ${Math.round(actualRatio * 100)}% (${testFiles.length} test files for ${sourceFiles.length} source files). Need at least ${Math.round(minCoverage * 100)}%.`,
       location: { file: options.rootDir, line: 0 },
       suggestion: `Add ~${needed} test file(s) to reach the ${Math.round(minCoverage * 100)}% minimum for safe AI assistance.`,
@@ -362,9 +367,9 @@ export async function analyzeTestability(
 
   if (indexResult.dimensions.purityScore < 50) {
     issues.push({
-      type: 'low-testability',
+      type: IssueType.LowTestability,
       dimension: 'purity',
-      severity: 'major',
+      severity: Severity.Major,
       message: `Only ${indexResult.dimensions.purityScore}% of functions are pure — side-effectful functions require complex test setup.`,
       location: { file: options.rootDir, line: 0 },
       suggestion:
@@ -374,9 +379,9 @@ export async function analyzeTestability(
 
   if (indexResult.dimensions.observabilityScore < 50) {
     issues.push({
-      type: 'low-testability',
+      type: IssueType.LowTestability,
       dimension: 'observability',
-      severity: 'major',
+      severity: Severity.Major,
       message: `Many functions mutate external state directly — outputs are invisible to unit tests.`,
       location: { file: options.rootDir, line: 0 },
       suggestion: 'Prefer returning values over mutating shared state.',

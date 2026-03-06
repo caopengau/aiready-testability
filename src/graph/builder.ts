@@ -4,13 +4,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import { Severity, UnifiedReportSchema } from '@aiready/core';
-import type {
-  GraphData,
-  FileNode,
-  DependencyEdge,
-  IssueSeverity,
-} from '../types';
+import { Severity, UnifiedReportSchema, ToolName } from '@aiready/core';
+import type { GraphData, FileNode, DependencyEdge } from '../types';
 
 /**
  * GraphBuilder: programmatic builder and report-based builder
@@ -170,15 +165,19 @@ export class GraphBuilder {
 
     // Pre-scan for basenames
     const basenameMap = new Map<string, Set<string>>();
-    (report.patterns || []).forEach((p: any) => {
+    const patternData =
+      report[ToolName.PatternDetect] ||
+      report.patternDetect ||
+      report.patterns ||
+      {};
+    (patternData.results || []).forEach((p: any) => {
       const base = path.basename(p.fileName);
       if (!basenameMap.has(base)) basenameMap.set(base, new Set());
       basenameMap.get(base)!.add(p.fileName);
     });
 
-    // 1. Process patterns (Support unified patternDetect.results or legacy patterns)
-    const patterns =
-      report.patternDetect?.results || report.results || report.patterns || [];
+    // 1. Process patterns
+    const patterns = patternData.results || report.results || [];
     patterns.forEach((entry: any) => {
       const file = entry.fileName;
       builder.addNode(
@@ -234,9 +233,8 @@ export class GraphBuilder {
       });
     });
 
-    // 2. Duplicates (Support unified patternDetect.duplicates or legacy duplicates)
-    const duplicates =
-      report.patternDetect?.duplicates || report.duplicates || [];
+    // 2. Duplicates
+    const duplicates = patternData.duplicates || report.duplicates || [];
     duplicates.forEach((dup: any) => {
       builder.addNode(dup.file1, 'Similarity target', 5);
       builder.addNode(dup.file2, 'Similarity target', 5);
@@ -252,9 +250,15 @@ export class GraphBuilder {
       fileIssues.get(f2)!.duplicates += 1;
     });
 
-    // 3. Context: dependencies and related files (Support unified contextAnalyzer.results or legacy context)
-    const context = report.contextAnalyzer?.results || report.context || [];
-    context.forEach((ctx: any) => {
+    // 3. Context: dependencies and related files
+    const contextData =
+      report[ToolName.ContextAnalyzer] ||
+      report.contextAnalyzer ||
+      report.context ||
+      {};
+    const contextResults =
+      contextData.results || (Array.isArray(contextData) ? contextData : []);
+    contextResults.forEach((ctx: any) => {
       // Handle context analyzer results (which use 'file' instead of 'fileName')
       const file = ctx.fileName || ctx.file;
       builder.addNode(file, `Deps: ${ctx.dependencyCount || 0}`, 10);
@@ -320,8 +324,8 @@ export class GraphBuilder {
     });
 
     // 4. Doc Drift
-    const docDriftResults =
-      report.docDrift?.results || report.docDrift?.issues || [];
+    const docDriftData = report[ToolName.DocDrift] || report.docDrift || {};
+    const docDriftResults = docDriftData.results || docDriftData.issues || [];
     docDriftResults.forEach((issue: any) => {
       const file = issue.fileName || issue.location?.file;
       if (file) {
@@ -332,8 +336,12 @@ export class GraphBuilder {
     });
 
     // 5. Dependencies
-    const depsResults =
-      report.dependencyHealth?.results || report.deps?.issues || [];
+    const depsData =
+      report[ToolName.DependencyHealth] ||
+      report.dependencyHealth ||
+      report.deps ||
+      {};
+    const depsResults = depsData.results || depsData.issues || [];
     depsResults.forEach((issue: any) => {
       const file = issue.fileName || issue.location?.file;
       if (file) {

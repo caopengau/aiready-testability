@@ -4,6 +4,8 @@ import {
   calculateOverallScore,
   calculateTokenBudget,
   GLOBAL_SCAN_OPTIONS,
+  GLOBAL_INFRA_OPTIONS,
+  COMMON_FINE_TUNING_OPTIONS,
 } from '@aiready/core';
 import type {
   AnalysisResult,
@@ -95,7 +97,7 @@ const TOOL_PACKAGE_MAP: Record<string, string> = {
 function sanitizeToolConfig(config: any): any {
   if (!config || typeof config !== 'object') return config;
   const sanitized = { ...config };
-  GLOBAL_SCAN_OPTIONS.forEach((key: string) => {
+  GLOBAL_INFRA_OPTIONS.forEach((key: string) => {
     if (key !== 'rootDir') {
       delete (sanitized as any)[key];
     }
@@ -176,12 +178,14 @@ export async function analyzeUnified(
         rootDir: options.rootDir, // Always include rootDir
       };
 
-      // 2. Add other global options that tools might need
-      GLOBAL_SCAN_OPTIONS.forEach((key) => {
-        if (key in options && key !== 'toolConfigs') {
-          toolOptions[key] = (options as any)[key];
+      // 1. Pass through all known infra and fine-tuning options from root level
+      [...GLOBAL_INFRA_OPTIONS, ...COMMON_FINE_TUNING_OPTIONS].forEach(
+        (key) => {
+          if (key in options && key !== 'toolConfigs') {
+            toolOptions[key] = (options as any)[key];
+          }
         }
-      });
+      );
 
       // 3. Add tool-specific overrides
       if (options.toolConfigs?.[provider.id]) {

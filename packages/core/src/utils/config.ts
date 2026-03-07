@@ -85,12 +85,24 @@ export function mergeConfigWithDefaults(
   }
 
   // Merge tool-specific options (support both 'tools' and 'toolConfigs' for backward compatibility)
-  const toolOverrides = userConfig.tools || (userConfig as any).toolConfigs;
+  // Ensure we don't pick up the tools array by mistake
+  const toolOverrides =
+    userConfig.tools &&
+    !Array.isArray(userConfig.tools) &&
+    typeof userConfig.tools === 'object'
+      ? userConfig.tools
+      : (userConfig as any).toolConfigs;
+
   if (toolOverrides) {
+    if (!result.toolConfigs) result.toolConfigs = {};
     for (const [toolName, toolConfig] of Object.entries(toolOverrides)) {
       if (typeof toolConfig === 'object' && toolConfig !== null) {
-        // Add tool configs under their names
+        // Add tool configs under their names (legacy) and in the toolConfigs map
         result[toolName] = { ...result[toolName], ...toolConfig };
+        result.toolConfigs[toolName] = {
+          ...result.toolConfigs[toolName],
+          ...toolConfig,
+        };
       }
     }
   }

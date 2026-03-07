@@ -140,12 +140,14 @@ export async function scanAction(directory: string, options: ScanOptions) {
       const { getSmartDefaults } = await import('@aiready/pattern-detect');
       const patternSmartDefaults = await getSmartDefaults(
         resolvedDir,
-        baseOptions
+        finalOptions.toolConfigs?.[ToolName.PatternDetect] || {}
       );
-      finalOptions = {
+
+      // Merge smart defaults into toolConfigs instead of root level
+      if (!finalOptions.toolConfigs) finalOptions.toolConfigs = {};
+      finalOptions.toolConfigs[ToolName.PatternDetect] = {
         ...patternSmartDefaults,
-        ...finalOptions,
-        ...baseOptions,
+        ...finalOptions.toolConfigs[ToolName.PatternDetect],
       };
     }
 

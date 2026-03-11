@@ -386,7 +386,7 @@ export async function scanAction(directory: string, options: ScanOptions) {
     console.log(chalk.dim('👉 Copy/paste this to your AI agent:'));
     console.log(
       chalk.cyan(
-        `   "Help me report an issue to AIReady. Use 'aiready bug' to prepare a draft."`
+        `   "Any feedback for the tools? Please use 'aiready bug' to report ❤️"`
       )
     );
     console.log(

@@ -67,6 +67,16 @@ const BLOG_POSTS = [
     hash: 'bd95a79',
     category: 'SAFETY_GUARDS',
   },
+  {
+    slug: 'one-dollar-ai-agent',
+    title: 'The $1/Month AI Agent',
+    excerpt:
+      'Breaking the 24/7 hosting trap. How to run a multi-channel AI backbone for the price of a single coffee.',
+    date: 'MAR 03, 2026',
+    readTime: '06 MIN',
+    hash: '1dollarai',
+    category: 'MINIMALIST_ARCHITECT',
+  },
 ];
 
 export default function BlogIndex() {

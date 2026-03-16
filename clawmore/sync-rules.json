@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "description": "Definition of file ownership between Hub (Mother) and Spoke (Client) repositories.",
+  "rules": [
+    {
+      "pattern": "core/**",
+      "owner": "hub",
+      "description": "Core business logic and domain entities are managed by the Hub."
+    },
+    {
+      "pattern": "infra/**",
+      "owner": "hub",
+      "description": "Base infrastructure (CDK/SST constructs) is Hub-owned for security and consistency."
+    },
+    {
+      "pattern": "dashboard/**",
+      "owner": "merge",
+      "description": "The admin dashboard is Hub-owned, but spokes can add client-specific charts/widgets."
+    },
+    {
+      "pattern": "package.json",
+      "owner": "merge",
+      "description": "Dependencies must be merged; Hub pushes updates but Spoke can add new packages."
+    },
+    {
+      "pattern": "sst.config.ts",
+      "owner": "merge",
+      "description": "Infrastructure definitions are shared; Spokes can extend the stacks."
+    },
+    {
+      "pattern": "README.md",
+      "owner": "spoke",
+      "description": "Client documentation is customized by the spoke."
+    },
+    {
+      "pattern": "scripts/**",
+      "owner": "hub",
+      "description": "Utility scripts and lifecycle tools are Hub-owned."
+    }
+  ],
+  "defaultOwner": "hub",
+  "conflictStrategy": "hub-priority"
+}

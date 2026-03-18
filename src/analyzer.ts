@@ -68,7 +68,7 @@ async function analyzeFileTestability(filePath: string): Promise<FileAnalysis> {
         }
         // Heuristic: bloated classes
         const total = (exp.methodCount || 0) + (exp.propertyCount || 0);
-        if (total > 5) {
+        if (total > 10) {
           result.bloatedInterfaces++;
         }
       }
@@ -77,7 +77,7 @@ async function analyzeFileTestability(filePath: string): Promise<FileAnalysis> {
         result.totalInterfaces++;
         // Heuristic: interfaces with many methods/props are considered bloated
         const total = (exp.methodCount || 0) + (exp.propertyCount || 0);
-        if (total > 5) {
+        if (total > 10) {
           result.bloatedInterfaces++;
         }
       }

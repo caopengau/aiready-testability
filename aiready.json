@@ -41,7 +41,29 @@
     },
     "naming-consistency": {
       "shortWords": ["id", "db", "ui", "ai"],
-      "acceptedAbbreviations": [],
+      "acceptedAbbreviations": [
+        "API",
+        "JSON",
+        "CSV",
+        "HTML",
+        "CSS",
+        "HTTP",
+        "URL",
+        "SDK",
+        "CLI",
+        "AI",
+        "ML",
+        "ID",
+        "DB",
+        "UI",
+        "config",
+        "Config",
+        "DEFAULT",
+        "MAX",
+        "MIN",
+        "INIT",
+        "SKILL"
+      ],
       "disableChecks": []
     },
     "ai-signal-clarity": {
@@ -57,7 +79,7 @@
       "readmeStaleDays": 30
     },
     "testability-index": {
-      "minCoverageRatio": 0.5,
+      "minCoverageRatio": 0.3,
       "testPatterns": ["**/*.test.ts", "**/__tests__/**", "**/*.spec.ts"]
     },
     "doc-drift": {

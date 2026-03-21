@@ -1,20 +1,21 @@
-export interface GraphNode {
-  id: string;
+import type { BaseGraphNode, BaseGraphLink } from '@aiready/core/client';
+
+/**
+ * Graph node extending core BaseGraphNode with component-specific properties
+ */
+export interface GraphNode extends BaseGraphNode {
   label?: string;
   color?: string;
   size?: number;
   group?: string;
   kind?: 'file' | 'package';
   packageGroup?: string;
-  x?: number;
-  y?: number;
-  fx?: number | null;
-  fy?: number | null;
 }
 
-export interface GraphLink {
-  source: string | GraphNode;
-  target: string | GraphNode;
+/**
+ * Graph link extending core BaseGraphLink with component-specific properties
+ */
+export interface GraphLink extends BaseGraphLink {
   color?: string;
   width?: number;
   label?: string;

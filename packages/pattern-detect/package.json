@@ -13,11 +13,31 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
+    },
+    "./analyzer": {
+      "types": "./dist/analyzer-entry.d.ts",
+      "require": "./dist/analyzer-entry.js",
+      "import": "./dist/analyzer-entry.mjs"
+    },
+    "./detector": {
+      "types": "./dist/detector-entry.d.ts",
+      "require": "./dist/detector-entry.js",
+      "import": "./dist/detector-entry.mjs"
+    },
+    "./scoring": {
+      "types": "./dist/scoring-entry.d.ts",
+      "require": "./dist/scoring-entry.js",
+      "import": "./dist/scoring-entry.mjs"
+    },
+    "./context-rules": {
+      "types": "./dist/context-rules-entry.d.ts",
+      "require": "./dist/context-rules-entry.js",
+      "import": "./dist/context-rules-entry.mjs"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts src/cli.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts src/cli.ts --format cjs,esm --dts --watch",
+    "build": "tsup src/index.ts src/cli.ts src/analyzer-entry.ts src/detector-entry.ts src/scoring-entry.ts src/context-rules-entry.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts src/cli.ts src/analyzer-entry.ts src/detector-entry.ts src/scoring-entry.ts src/context-rules-entry.ts --format cjs,esm --dts --watch",
     "test": "vitest run",
     "lint": "eslint src",
     "clean": "rm -rf dist",

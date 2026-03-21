@@ -13,31 +13,9 @@ import type {
 export type IssueSeverity = Severity;
 
 /**
- * Base graph node (compatible with d3-force SimulationNodeDatum)
- */
-export interface BaseGraphNode {
-  id: string;
-  x?: number;
-  y?: number;
-  vx?: number;
-  vy?: number;
-  fx?: number | null;
-  fy?: number | null;
-}
-
-/**
- * Base graph link (compatible with d3-force SimulationLinkDatum)
- */
-export interface BaseGraphLink {
-  source: string | BaseGraphNode;
-  target: string | BaseGraphNode;
-  index?: number;
-}
-
-/**
  * File node in the dependency graph
  */
-export interface FileNode extends BaseGraphNode, GraphNode {
+export interface FileNode extends GraphNode {
   id: string;
   path: string;
   label: string;

@@ -11,6 +11,17 @@ vi.mock('@aiready/core', () => ({
     `<table><thead><tr>${options.headers.map((h) => `<th>${h}</th>`).join('')}</thead><tbody>${options.rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`,
   generateReportFooter: (options: any) =>
     `<footer>${options.title} - ${options.packageUrl}</footer>`,
+  generateReportHero: (title: string, subtitle?: string) =>
+    `<div class="hero"><h1>${title}</h1><p>${subtitle}</p></div>`,
+  generateIssueSummary: (
+    critical: number,
+    major: number,
+    minor: number,
+    savings?: number
+  ) =>
+    `<div class="issue-summary">Issues: Critical:${critical}, Major:${major}, Minor:${minor}. Savings: ${savings}</div>`,
+  wrapInCard: (content: string, title?: string) =>
+    `<div class="card"><h2>${title}</h2>${content}</div>`,
 }));
 
 describe('generateHTMLReport', () => {
@@ -98,11 +109,11 @@ describe('generateHTMLReport', () => {
 
     const html = generateHTMLReport(summary, results);
 
-    expect(html).toContain('Issues Summary');
+    expect(html).toContain('Issues:');
     expect(html).toContain('Critical:');
     expect(html).toContain('Major:');
     expect(html).toContain('Minor:');
-    expect(html).toContain('Potential Savings');
+    expect(html).toContain('Savings');
   });
 
   it('should not include issues section when no issues', () => {
@@ -227,6 +238,6 @@ describe('generateHTMLReport', () => {
     const html = generateHTMLReport(summary, results);
 
     // Should show issues section
-    expect(html).toContain('Issues Summary');
+    expect(html).toContain('Issues:');
   });
 });

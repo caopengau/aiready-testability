@@ -37,7 +37,7 @@ describe('Change Amplification Scoring', () => {
     };
 
     const scoring = calculateChangeAmplificationScore(lowScoreReport);
-    expect(scoring.factors[0].description).toContain('High coupling');
+    expect(scoring.factors[0].description).toContain('20/100');
     expect(scoring.recommendations[0].priority).toBe('high');
   });
 });

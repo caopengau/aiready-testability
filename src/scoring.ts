@@ -20,6 +20,8 @@ export function calculateTestabilityScore(report: TestabilityReport): any {
       observabilityScore: 'Observability',
     },
     recommendations,
-    rating: summary.rating,
+    recommendationImpact:
+      summary.aiChangeSafetyRating === 'blind-risk' ? 15 : 8,
+    rating: summary.aiChangeSafetyRating || summary.rating,
   });
 }

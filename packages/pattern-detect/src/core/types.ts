@@ -1,4 +1,8 @@
-import { Severity, FileContent } from '@aiready/core';
+import {
+  Severity,
+  FileContent,
+  CodeBlock as CoreCodeBlock,
+} from '@aiready/core';
 
 export type { FileContent };
 
@@ -11,16 +15,10 @@ export type PatternType =
   | 'function'
   | 'unknown';
 
-export interface CodeBlock {
-  file: string;
-  startLine: number;
-  endLine: number;
-  code: string;
-  tokens: number;
-  patternType: PatternType;
-  signature?: string;
-  hash?: string;
-}
+// Use canonical CodeBlock from core, with PatternType narrowing
+export type CodeBlock = CoreCodeBlock & {
+  patternType: PatternType | string;
+};
 
 export interface DuplicatePattern {
   file1: string;

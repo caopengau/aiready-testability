@@ -5,9 +5,10 @@ import {
   IssueType,
   runBatchAnalysis,
   getParser,
+  isTestFile,
+  detectTestFramework,
 } from '@aiready/core';
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'fs';
 import type {
   TestabilityOptions,
   TestabilityIssue,
@@ -89,61 +90,8 @@ async function analyzeFileTestability(filePath: string): Promise<FileAnalysis> {
   return result;
 }
 
-// ---------------------------------------------------------------------------
-// Test framework detection
-// ---------------------------------------------------------------------------
-
-function detectTestFramework(rootDir: string): boolean {
-  // Check common manifest files
-  const manifests = [
-    {
-      file: 'package.json',
-      deps: ['jest', 'vitest', 'mocha', 'mocha', 'jasmine', 'ava', 'tap'],
-    },
-    { file: 'requirements.txt', deps: ['pytest', 'unittest', 'nose'] },
-    { file: 'pyproject.toml', deps: ['pytest'] },
-    { file: 'pom.xml', deps: ['junit', 'testng'] },
-    { file: 'build.gradle', deps: ['junit', 'testng'] },
-    { file: 'go.mod', deps: ['testing'] }, // go testing is built-in
-  ];
-
-  for (const m of manifests) {
-    const p = join(rootDir, m.file);
-    if (existsSync(p)) {
-      if (m.file === 'go.mod') return true; // built-in
-      try {
-        const content = readFileSync(p, 'utf-8');
-        if (m.deps.some((d) => content.includes(d))) return true;
-      } catch {
-        // Ignore file read errors
-      }
-    }
-  }
-  return false;
-}
-
-// ---------------------------------------------------------------------------
 // Main analyzer
 // ---------------------------------------------------------------------------
-
-const TEST_PATTERNS = [
-  /\.(test|spec)\.(ts|tsx|js|jsx)$/,
-  /_test\.go$/,
-  /test_.*\.py$/,
-  /.*_test\.py$/,
-  /.*Test\.java$/,
-  /.*Tests\.cs$/,
-  /__tests__\//,
-  /\/tests?\//,
-  /\/e2e\//,
-  /\/fixtures\//,
-];
-
-function isTestFile(filePath: string, extra?: string[]): boolean {
-  if (TEST_PATTERNS.some((p) => p.test(filePath))) return true;
-  if (extra) return extra.some((p) => filePath.includes(p));
-  return false;
-}
 
 export async function analyzeTestability(
   options: TestabilityOptions

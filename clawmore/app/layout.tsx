@@ -14,17 +14,28 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'ClawMore | Autonomous Infrastructure Evolution',
+    default: 'ClawMore | OpenClaw Agentic Swarm for AWS',
     template: '%s | ClawMore',
   },
   description:
-    "ClawMore: The world's first autonomous agentic system for AWS. Real-time infrastructure synthesis and self-healing.",
+    "ClawMore: Simple one-click OpenClaw deployment. The world's first autonomous agentic swarm for serverless AWS. AI orchestration, AI automation, and agent-to-agent collaboration — enabling human-to-agent and multi-human multi-agent collaboration.",
   keywords: [
+    'openclaw',
+    'serverless',
+    'agentic',
+    'agentic swarm',
+    'ai agent',
+    'ai orchestration',
+    'ai automation',
+    'simple openclaw',
+    'one click openclaw',
+    'agent to agent collaboration',
+    'human to agent collaboration',
+    'multi human multi agent collaboration',
     'AWS',
     'Autonomous Agents',
     'Infrastructure as Code',
     'SST',
-    'Serverless',
     'AI Agents',
     'Self-Healing Infrastructure',
   ],
@@ -39,9 +50,17 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://clawmore.ai',
     siteName: 'ClawMore',
-    title: 'ClawMore | Autonomous Infrastructure Evolution',
+    title: 'ClawMore | OpenClaw Agentic Swarm for AWS',
     description:
-      "The world's first autonomous agentic system for AWS. Real-time infrastructure synthesis and self-healing.",
+      "Simple one-click OpenClaw deployment. The world's first autonomous agentic swarm for serverless AWS. AI orchestration, AI automation, and agent collaboration.",
+    keywords: [
+      'openclaw',
+      'agentic swarm',
+      'ai orchestration',
+      'ai automation',
+      'serverless',
+      'agent to agent collaboration',
+    ],
     images: [
       {
         url: '/og-home.png',
@@ -53,9 +72,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ClawMore | Autonomous Infrastructure Evolution',
+    title: 'ClawMore | OpenClaw Agentic Swarm for AWS',
     description:
-      "The world's first autonomous agentic system for AWS. Real-time infrastructure synthesis and self-healing.",
+      'Simple one-click OpenClaw deployment. Autonomous agentic swarm for serverless AWS. AI orchestration and agent collaboration.',
     creator: '@clawmore',
     images: ['/og-home.png'],
   },

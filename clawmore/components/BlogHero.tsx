@@ -42,8 +42,11 @@ export default function BlogHero() {
             transition={{ delay: 0.2 }}
             className="text-lg text-zinc-500 max-w-2xl mx-auto mb-12 font-mono uppercase tracking-widest text-[11px] leading-relaxed"
           >
-            Logging the mutations, failures, and autonomous breakthroughs of the
-            <span className="text-white mx-2">serverlessclaw</span> engine.
+            Deep dives into serverless agentic systems, openclaw architecture,
+            and the future of AI orchestration.
+            <span className="text-white mx-2">AI automation</span> and
+            <span className="text-white mx-2">agent collaboration</span>{' '}
+            insights.
           </motion.p>
 
           <motion.div

@@ -28,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { slug: 'one-dollar-ai-agent', date: '2026-03-12' },
   ];
 
-  const routes = ['', '/blog', '/pricing', '/evolution'].map((route) => ({
+  const routes = ['', '/blog', '/signup', '/login'].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,

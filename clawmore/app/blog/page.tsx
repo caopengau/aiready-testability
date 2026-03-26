@@ -2,13 +2,24 @@ import { Metadata } from 'next';
 import BlogClient from './BlogClient';
 
 export const metadata: Metadata = {
-  title: 'Blog | ClawMore - Agentic Insights & Infrastructure Evolution',
+  title: 'Blog | ClawMore - Serverless Agentic Insights & AI Orchestration',
   description:
-    'Deep dives into autonomous agentic systems, infrastructure evolution, and the future of agentic AWS operations at ClawMore.',
+    'Deep dives into serverless agentic systems, openclaw architecture, AI orchestration, AI automation, and the future of agent-to-agent collaboration at ClawMore.',
+  keywords: [
+    'openclaw',
+    'serverless',
+    'agentic',
+    'agentic swarm',
+    'ai agent',
+    'ai orchestration',
+    'ai automation',
+    'agent to agent collaboration',
+    'human to agent collaboration',
+  ],
   openGraph: {
-    title: 'ClawMore Blog - Agentic Insights & Infrastructure Evolution',
+    title: 'ClawMore Blog - Serverless Agentic Insights & AI Orchestration',
     description:
-      'Deep dives into autonomous agentic systems, infrastructure evolution, and the future of agentic AWS operations.',
+      'Deep dives into serverless agentic systems, openclaw architecture, AI orchestration, and the future of agent-to-agent collaboration.',
     url: 'https://clawmore.ai/blog',
     images: [
       {
@@ -21,9 +32,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ClawMore Blog - Agentic Insights & Infrastructure Evolution',
+    title: 'ClawMore Blog - Serverless Agentic Insights & AI Orchestration',
     description:
-      'Deep dives into autonomous agentic systems, infrastructure evolution, and the future of agentic AWS operations.',
+      'Deep dives into serverless agentic systems, openclaw architecture, AI orchestration, and agent-to-agent collaboration.',
     creator: '@clawmore',
     images: ['/og-blog.png'],
   },

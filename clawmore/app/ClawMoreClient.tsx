@@ -23,11 +23,37 @@ interface ClawMoreClientProps {
   dict?: any;
 }
 
-const CLAW_MORE_JSON_LD = {
+const ORGANIZATION_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'ClawMore',
+  url: 'https://clawmore.ai',
+  logo: 'https://clawmore.ai/logo.png',
+  description:
+    "Simple one-click OpenClaw deployment. The world's first autonomous agentic swarm for serverless AWS.",
+  sameAs: ['https://github.com/caopengau/aiready-clawmore'],
+};
+
+const WEBSITE_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'ClawMore',
+  url: 'https://clawmore.ai',
+  description:
+    'Simple one-click OpenClaw deployment for serverless agentic swarm AI orchestration.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://clawmore.ai/blog?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const SOFTWARE_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: 'ClawMore',
-  description: 'Autonomous Infrastructure Evolution for AWS',
+  description:
+    'Simple one-click OpenClaw deployment. Autonomous agentic swarm for serverless AWS. AI orchestration, AI automation, and agent-to-agent collaboration.',
   applicationCategory: 'DevOpsApplication',
   operatingSystem: 'AWS',
   offers: {
@@ -39,6 +65,53 @@ const CLAW_MORE_JSON_LD = {
     '@type': 'Organization',
     name: 'Perpetual Evolution',
   },
+};
+
+const FAQ_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is ClawMore?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'ClawMore is an autonomous platform that manages your AWS infrastructure and automatically improves your codebase. It monitors your system, detects issues, and applies fixes — so you can focus on building features.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does the auto-fix system work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'ClawMore runs a continuous loop: it scans your logs and performance data, identifies areas for improvement, generates a code fix using AI, and commits it to your repository. You review and approve every change.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is it safe to connect my AWS account?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. ClawMore runs in your own AWS account (BYOC), not ours. It uses strict permission boundaries that prevent it from accessing data outside your infrastructure. You maintain full control.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What does the $29/month include?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Your subscription includes managed infrastructure, a web dashboard, automated code improvements, CI/CD integration, and $10/month in AI credits for code fixes. You can cancel anytime.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I try it for free?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely. The free tier includes our full analysis CLI, 3 repositories, and 10 scans per month. No credit card required. Upgrade when you are ready.',
+      },
+    },
+  ],
 };
 export default function ClawMoreClient({ apiUrl, dict }: ClawMoreClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,7 +155,10 @@ export default function ClawMoreClient({ apiUrl, dict }: ClawMoreClientProps) {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-cyber-blue/30 selection:text-cyber-blue font-sans text-left">
-      <JsonLd data={CLAW_MORE_JSON_LD} />
+      <JsonLd data={ORGANIZATION_JSON_LD} />
+      <JsonLd data={WEBSITE_JSON_LD} />
+      <JsonLd data={SOFTWARE_JSON_LD} />
+      <JsonLd data={FAQ_JSON_LD} />
       <Navbar dict={dict} />
 
       <section className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden border-b border-white/5 isolate py-14 sm:py-20">
@@ -235,12 +311,8 @@ export default function ClawMoreClient({ apiUrl, dict }: ClawMoreClientProps) {
                       0{idx + 1}
                     </div>
                     <div>
-                      <div className="font-black text-xs uppercase tracking-widest mb-1">
-                        {item.label}
-                      </div>
-                      <div className="text-xs text-zinc-500 font-mono tracking-tight">
-                        {item.desc}
-                      </div>
+                      <div className="font-bold text-sm mb-1">{item.label}</div>
+                      <div className="text-xs text-zinc-500">{item.desc}</div>
                     </div>
                   </div>
                 ))}
@@ -358,9 +430,9 @@ export default function ClawMoreClient({ apiUrl, dict }: ClawMoreClientProps) {
                   (feature: string, idx: number) => (
                     <li
                       key={idx}
-                      className="flex items-center gap-3 text-sm text-zinc-100 font-mono uppercase tracking-tight"
+                      className="flex items-center gap-3 text-sm text-zinc-100"
                     >
-                      <ShieldCheck className="w-5 h-5 text-purple-400" />{' '}
+                      <ShieldCheck className="w-5 h-5 text-purple-400 shrink-0" />{' '}
                       {feature}
                     </li>
                   )
@@ -398,9 +470,10 @@ export default function ClawMoreClient({ apiUrl, dict }: ClawMoreClientProps) {
                   (feature: string, idx: number) => (
                     <li
                       key={idx}
-                      className="flex items-center gap-3 text-sm text-zinc-100 font-mono uppercase tracking-tight"
+                      className="flex items-center gap-3 text-sm text-zinc-100"
                     >
-                      <Zap className="w-5 h-5 text-cyber-blue" /> {feature}
+                      <Zap className="w-5 h-5 text-cyber-blue shrink-0" />{' '}
+                      {feature}
                     </li>
                   )
                 )}
@@ -445,16 +518,18 @@ export default function ClawMoreClient({ apiUrl, dict }: ClawMoreClientProps) {
               ClawMore
             </span>
           </div>
-          <div className="text-zinc-600 text-[10px] font-mono uppercase tracking-[0.3em] font-bold">
+          <div className="text-zinc-500 text-sm">
             {dict.footer.ecosystem}{' '}
             <Link
               href="https://getaiready.dev"
               className="text-zinc-400 hover:text-cyber-blue transition-colors underline decoration-white/10 underline-offset-4"
             >
-              AIReady_Ecosystem
+              AIReady Ecosystem
             </Link>{' '}
             neural network.
-            <div className="mt-6 opacity-40">{dict.footer.copyright}</div>
+            <div className="mt-4 text-xs text-zinc-600">
+              {dict.footer.copyright}
+            </div>
           </div>
         </div>
       </footer>

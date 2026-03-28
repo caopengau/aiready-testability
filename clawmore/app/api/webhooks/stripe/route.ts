@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err: any) {
-    console.error(`Webhook signature verification failed.`, err.message);
+    log.error({ err }, 'Webhook signature verification failed');
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
@@ -101,13 +101,16 @@ export async function POST(req: NextRequest) {
               });
 
               // Send approval notification
-              sendApprovalEmail(userEmail, userName).catch(console.error);
+              sendApprovalEmail(userEmail, userName).catch((err) =>
+                log.error({ err, userId }, 'Failed to send approval email')
+              );
 
               // Trigger Autonomous Provisioning
               const githubToken = process.env.GITHUB_SERVICE_TOKEN;
               if (githubToken && repoName) {
-                console.log(
-                  `[Webhook] Triggering provisioning for ${userEmail}...`
+                log.info(
+                  { userId, email: userEmail },
+                  'Triggering provisioning'
                 );
                 const orchestrator = new ProvisioningOrchestrator(githubToken);
 
@@ -121,21 +124,19 @@ export async function POST(req: NextRequest) {
                       session.metadata?.coEvolutionOptIn === 'true',
                   })
                   .then((result) => {
-                    console.log(
-                      `[Webhook] Provisioning complete for ${userEmail}:`,
-                      result.accountId
+                    log.info(
+                      { userId, accountId: result.accountId },
+                      'Provisioning complete'
                     );
                   })
                   .catch((err) => {
-                    console.error(
-                      `[Webhook] Provisioning FAILED for ${userEmail}:`,
-                      err
-                    );
+                    log.error({ err, userId }, 'Provisioning failed');
                   });
               }
 
-              console.log(
-                `Initialized managed subscription for user ${userId} (${userEmail})`
+              log.info(
+                { userId, email: userEmail },
+                'Managed subscription initialized'
               );
             }
           }
@@ -174,9 +175,7 @@ export async function POST(req: NextRequest) {
                 ':zero': 0,
               },
             });
-            console.log(
-              `Added ${amountCents} cents to fuel pack for user ${userId}`
-            );
+            log.info({ userId, amountCents }, 'AI credits topped up');
           }
         }
         break;
@@ -214,8 +213,9 @@ export async function POST(req: NextRequest) {
                 ':zero': 0,
               },
             });
-            console.log(
-              `Invoice paid for sub ${invoice.subscription}. Replenished $10 fuel for user ${userId}.`
+            log.info(
+              { userId, subscriptionId },
+              'Monthly AI credits replenished'
             );
           }
         }
@@ -225,9 +225,7 @@ export async function POST(req: NextRequest) {
       case 'invoice.payment_failed': {
         const invoice = event.data.object as any;
         const customerId = invoice.customer as string;
-        console.warn(
-          `[Webhook] Payment failed for customer ${customerId}, invoice ${invoice.id}`
-        );
+        log.warn({ customerId, invoiceId: invoice.id }, 'Payment failed');
 
         // Find user by Stripe Customer ID
         const res = await docClient.query({
@@ -257,12 +255,12 @@ export async function POST(req: NextRequest) {
           const userEmail = userItem.email || userItem.GSI1SK;
           const userName = userItem.name || 'there';
           if (userEmail) {
-            sendPaymentFailedEmail(userEmail, userName).catch(console.error);
+            sendPaymentFailedEmail(userEmail, userName).catch((err) =>
+              log.error({ err, userId }, 'Failed to send payment failed email')
+            );
           }
 
-          console.log(
-            `Marked payment failed for user ${userId} (${customerId})`
-          );
+          log.info({ userId, customerId }, 'Payment failed status recorded');
         }
         break;
       }
@@ -294,8 +292,9 @@ export async function POST(req: NextRequest) {
               ':now': new Date().toISOString(),
             },
           });
-          console.log(
-            `Subscription updated for user ${userId}: ${subscription.status}`
+          log.info(
+            { userId, status: subscription.status },
+            'Subscription updated'
           );
         }
         break;
@@ -305,9 +304,7 @@ export async function POST(req: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
 
-        console.warn(
-          `[Webhook] Subscription cancelled for customer ${customerId}`
-        );
+        log.warn({ customerId }, 'Subscription cancelled');
 
         // Find user by Stripe Customer ID
         const res = await docClient.query({
@@ -340,14 +337,12 @@ export async function POST(req: NextRequest) {
           const userEmail = userItem.email || userItem.GSI1SK;
           const userName = userItem.name || 'there';
           if (userEmail) {
-            sendSubscriptionCancelledEmail(userEmail, userName).catch(
-              console.error
+            sendSubscriptionCancelledEmail(userEmail, userName).catch((err) =>
+              log.error({ err, userId }, 'Failed to send cancellation email')
             );
           }
 
-          console.log(
-            `Downgraded user ${userId} to FREE plan after subscription cancellation`
-          );
+          log.info({ userId }, 'User downgraded to FREE after cancellation');
         }
         break;
       }
@@ -355,7 +350,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Error processing webhook event:', error);
+    log.error({ err: error }, 'Webhook event processing failed');
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 500 }

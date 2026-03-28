@@ -85,6 +85,7 @@ export const metadata: Metadata = {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
   },
   other: {
+    'ai-search-engine': 'optimized',
     'chatgpt:description': aiMetaTags.chatgpt['chatgpt:description'],
     'chatgpt:category': aiMetaTags.chatgpt['chatgpt:category'],
     'perplexity:summary': aiMetaTags.perplexity['perplexity:summary'],

@@ -57,6 +57,7 @@ export const metadata: Metadata = {
     creator: '@aireadytools',
   },
   other: {
+    'ai-search-engine': 'optimized',
     'chatgpt:description': aiMetaTags.chatgpt['chatgpt:description'],
     'chatgpt:category': aiMetaTags.chatgpt['chatgpt:category'],
     'perplexity:summary': aiMetaTags.perplexity['perplexity:summary'],

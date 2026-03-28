@@ -1,4 +1,7 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import { createLogger } from './logger';
+
+const log = createLogger('email');
 
 const sesClient = new SESClient({
   region: process.env.AWS_REGION || 'ap-southeast-2',
@@ -54,9 +57,9 @@ async function sendEmail(
 
   try {
     await sesClient.send(command);
-    console.log(`[Email] Sent "${subject}" to ${to}`);
+    log.info({ to, subject }, 'Email sent');
   } catch (err) {
-    console.error(`[Email] Failed to send to ${to}:`, err);
+    log.error({ err, to, subject }, 'Email send failed');
   }
 }
 

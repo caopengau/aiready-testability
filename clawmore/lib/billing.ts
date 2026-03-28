@@ -1,5 +1,8 @@
 import Stripe from 'stripe';
 import { Resource } from 'sst';
+import { createLogger } from './logger';
+
+const log = createLogger('billing');
 
 let stripeClient: Stripe | null = null;
 
@@ -112,11 +115,12 @@ export async function reportMeteredUsage(
         action: 'increment',
       }
     );
-    console.log(
-      `Reported metered usage (${quantity}) for ${subscriptionItemId}`
-    );
+    log.info({ subscriptionItemId, quantity }, 'Metered usage reported');
   } catch (error) {
-    console.error('Error reporting metered usage to Stripe:', error);
+    log.error(
+      { err: error, subscriptionItemId },
+      'Failed to report metered usage'
+    );
     throw error;
   }
 }
@@ -136,11 +140,12 @@ export async function reportOverageCharge(
       currency: 'usd',
       description,
     });
-    console.log(
-      `Reported overage charge of $${(amountInCents / 100).toFixed(2)} for ${customerId}`
+    log.info(
+      { customerId, amountCents: amountInCents },
+      'Overage charge reported'
     );
   } catch (error) {
-    console.error('Error reporting overage charge to Stripe:', error);
+    log.error({ err: error, customerId }, 'Failed to report overage charge');
     throw error;
   }
 }

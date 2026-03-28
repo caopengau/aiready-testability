@@ -3,6 +3,9 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { z } from 'zod';
 import { sendWelcomeEmail } from '../../../../lib/email';
+import { createLogger } from '../../../../lib/logger';
+
+const log = createLogger('register');
 
 const dbClient = new DynamoDBClient({
   region: process.env.AWS_REGION || 'ap-southeast-2',
@@ -119,7 +122,11 @@ export async function POST(req: NextRequest) {
     });
 
     // Send welcome email (don't block the response)
-    sendWelcomeEmail(normalizedEmail, name).catch(console.error);
+    sendWelcomeEmail(normalizedEmail, name).catch((err) =>
+      log.error({ err, email: normalizedEmail }, 'Failed to send welcome email')
+    );
+
+    log.info({ userId: id, email: normalizedEmail }, 'User registered');
 
     return NextResponse.json({
       success: true,
@@ -127,7 +134,7 @@ export async function POST(req: NextRequest) {
       userId: id,
     });
   } catch (error: any) {
-    console.error('[Register] Error:', error);
+    log.error({ err: error }, 'Registration failed');
     return NextResponse.json({ error: 'Registration failed' }, { status: 500 });
   }
 }

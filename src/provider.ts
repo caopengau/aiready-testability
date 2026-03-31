@@ -11,7 +11,7 @@ import { TestabilityOptions, TestabilityReport } from './types';
 /**
  * Testability Tool Provider
  */
-export const TestabilityProvider = createProvider({
+export const TESTABILITY_PROVIDER = createProvider({
   id: ToolName.TestabilityIndex,
   alias: ['testability', 'tests', 'verification'],
   version: '0.2.5',

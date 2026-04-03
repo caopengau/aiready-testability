@@ -47,7 +47,7 @@ PUBLIC_GITHUB_SPOKES := agent-grounding ai-signal-clarity ast-mcp-server change-
 
 # Spokes that are published to npm registry
 # Note: skills is excluded (published via Paks/Smithery, not npm)
-NPM_PUBLISH_SPOKES := agent-grounding ai-signal-clarity ast-mcp-server change-amplification cli consistency context-analyzer contract-enforcement core deps doc-drift pattern-detect testability visualizer
+NPM_PUBLISH_SPOKES := agent-grounding ai-signal-clarity ast-mcp-server change-amplification cli consistency context-analyzer contract-enforcement core deps doc-drift mcp-server pattern-detect testability visualizer
 
 # Resolve root directory relative to this file
 ROOT_DIR ?= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
